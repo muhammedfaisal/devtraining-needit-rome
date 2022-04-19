@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description/>
+        <field>u_requested_for</field>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>NeedIt Populate First Name</name>
+        <order/>
+        <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading && !g_form.isNewRecord() || newValue === '' || newValue == oldValue ) {
+      return;
+   }
+//Instantiate script include
+	var firstName = new GlideAjax('PopulateUserDetails');
+   //Call the method from the script include
+	firstName.addParam('sysparm_name','getUserDetail');
+	firstName.addParam('sysparm_userID',g_form.getValue('u_requested_for'));
+	firstName.getXML(populateFirstName);
+	
+	function populateFirstName(response){
+		
+		var firstNameFromScriptInclude = response.responseXML.documentElement.getAttribute("answer");
+		//g_form.addInfoMessage(firstNameFromScriptInclude); //JSON string
+		//answer = answer.evalJSON(); //Transform the JSON string to an object
+		//g_form.addInfoMessage(firstNameFromScriptInclude);
+		
+		var result = JSON.parse(firstNameFromScriptInclude);
+		g_form.setValue('u_first_name',result.firstName);
+		g_form.setValue('u_last_name',result.lastName);
+		
+		//g_form.clearValue('u_first_name');
+		//g_form.setValue('u_first_name',firstNameFromScriptInclude);
+	}
+	
+   
+}]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-04-17 07:43:42</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>b6742f1b2ffe0110acf151172799b651</sys_id>
+        <sys_mod_count>8</sys_mod_count>
+        <sys_name>NeedIt Populate First Name</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_client_b6742f1b2ffe0110acf151172799b651</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-04-19 07:33:31</sys_updated_on>
+        <table>x_58872_needit_needit</table>
+        <type>onChange</type>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>
